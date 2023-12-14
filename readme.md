@@ -1,5 +1,5 @@
 # Nira 
-Basically YAML without unnecesary features
+YAML without unnecesary features
 
 No JSON syntax
 
