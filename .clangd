@@ -1,0 +1,7 @@
+CompileFlags:
+  Add: 
+  - "-I/Users/Noor/dev/projects/personal/nira/source"
+  - "-I/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1"
+  - "-xc++"
+  - "-std=c++17"
+

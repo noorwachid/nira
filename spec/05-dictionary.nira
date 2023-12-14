@@ -1,0 +1,10 @@
+# self explanatory  
+key: value
+
+# nested dictionary
+person:
+  name: Eve
+  hobby: Reading
+  # multiline string as dictionary value
+  bio: Currently on vacation on Earth. \
+    Will be in heaven again soon.

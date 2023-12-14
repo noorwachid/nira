@@ -1,0 +1,4 @@
+# to create multiline string 
+# the line has to end with backslash followed by newline
+this is multiline \
+string in nira
