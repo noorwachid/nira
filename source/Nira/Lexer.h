@@ -45,6 +45,7 @@ namespace Nira
 		void OnNewline();
 
 	private:
+		bool _keyPart;
 		size_t _index;
 		std::string _input;
 		std::vector<Token> _tokens;

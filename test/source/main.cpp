@@ -1,5 +1,6 @@
 #include "ToString.h"
 
+#include "Nira/Lexer.h"
 #include "Nira/Parse.h"
 #include "Nira/Compose.h"
 
@@ -44,10 +45,42 @@ int main(int argc, char** argv)
 	if (output != expectedOutput)
 	{
 		std::cout << "[FAIL] " << argv[1] << "\n";
-		std::cout << "expected-output does not match\n";
 		std::cout << "expected-output:\n";
 		std::cout << expectedOutput;
-		std::cout << "output:\n";
+		std::cout << "\noutput-tokens:\n";
+
+		Nira::Lexer lexer;
+		lexer.Tokenize(input);
+		for (size_t i = 0; i < lexer.GetTokenCount(); ++i)
+		{
+			const Nira::Token& token = lexer.GetToken(i);
+			switch (token.type)
+			{
+				case Nira::TokenType::Newline:
+					std::cout << "Newline\n";
+					break;
+				case Nira::TokenType::Bullet:
+					std::cout << "Bullet\n";
+					break;
+				case Nira::TokenType::Colon:
+					std::cout << "Colon\n";
+					break;
+				case Nira::TokenType::IndentIncr:
+					std::cout << "IndentIncr\n";
+					break;
+				case Nira::TokenType::IndentDecr:
+					std::cout << "IndentDecr\n";
+					break;
+				case Nira::TokenType::String:
+					std::cout << "String(" << token.content << ")\n";
+					break;
+				case Nira::TokenType::StringCon:
+					std::cout << "StringCon(" << token.content << ")\n";
+					break;
+			}
+		}
+
+		std::cout << "\noutput-tree:\n";
 		std::cout << output;
 		return 0;
 	}

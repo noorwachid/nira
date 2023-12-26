@@ -4,6 +4,7 @@ namespace Nira
 {
 	void Lexer::Tokenize(const std::string& input)
 	{
+		_keyPart = true;
 		_previousIndent = 0;
 		_index = 0;
 		_input = input;
@@ -32,23 +33,27 @@ namespace Nira
 
 				case ':': 
 				{
-					if (GetByte(1) == ' ')
+					if (_keyPart)
 					{
-						Token token;
-						token.type = TokenType::Colon;
-						_tokens.push_back(token);
-						Advance(2);
-						break;
-					}
+						if (GetByte(1) == ' ')
+						{
+							Token token;
+							token.type = TokenType::Colon;
+							_tokens.push_back(token);
+							_keyPart = false;
+							Advance(2);
+							break;
+						}
 
-					if (GetByte(1) == '\n')
-					{
-						Token token;
-						token.type = TokenType::Colon;
-						token.content = ":";
-						_tokens.push_back(token);
-						Advance(1);
-						break;
+						if (GetByte(1) == '\n')
+						{
+							Token token;
+							token.type = TokenType::Colon;
+							token.content = ":";
+							_tokens.push_back(token);
+							Advance(1);
+							break;
+						}
 					}
 
 					ConsumeString();
@@ -132,8 +137,15 @@ namespace Nira
 				
 				case '\n':
 				case '#':
-				case ':':
 					return;
+
+				case ':':
+					if (_keyPart)
+						return;
+					
+					_tokens.back().content += GetByte(0);
+					Advance(1);
+					break;
 
 				default:
 					_tokens.back().content += GetByte(0);
@@ -145,6 +157,7 @@ namespace Nira
 
 	void Lexer::OnNewline()
 	{
+		_keyPart = true;
 		size_t spaceCount = 0;
 
 		while (IsBound() && GetByte(0) == ' ')
