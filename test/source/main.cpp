@@ -52,7 +52,7 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 
 	if (node.IsDictionary())
 	{
-		std::cout << "Dictionary: " << node.AsString() << "\n";
+		std::cout << "Dictionary: " << "\n";
 		for (const auto& [key, node] : node.AsDictionary())
 		{
 			DebugNode(node, depth + 1, key + ": ");
@@ -63,17 +63,25 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 
 int main()
 {
-	std::string content = R"(
-- - - A
-    - B
-  - - C
-    - D
-- E
-)";
+	std::string content;
 
-// 	std::string content = R"(
-// key: value
+// 	content = R"(
+// - - - A
+//     - B
+//   - - C
+//     - D
+// - E
 // )";
+
+	content = R"(
+jaime:
+  hobby: Reading
+  age: 34
+  pets:
+    muray:
+      age: 3
+  current-address: ID 781
+)";
 
 	Nira::Lexer lexer;
 	lexer.Tokenize(content);

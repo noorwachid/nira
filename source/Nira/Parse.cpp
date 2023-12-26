@@ -1,26 +1,6 @@
 #include "Nira/Lexer.h"
 #include "Nira/Parse.h"
 
-const char* ToNullString(Nira::TokenType type)
-{
-	switch (type)
-	{
-		case Nira::TokenType::String:
-			return "String";
-		case Nira::TokenType::Colon:
-			return "Colon";
-		case Nira::TokenType::Bullet:
-			return "Bullet";
-		case Nira::TokenType::Newline:
-			return "Newline";
-		case Nira::TokenType::IndentIncr:
-			return "IndentIncr";
-		case Nira::TokenType::IndentDecr:
-			return "IndentDecr";
-	}
-}
-
-
 void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
 {
 	for (size_t i = 0; i < depth; ++i)
@@ -48,7 +28,7 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 
 	if (node.IsDictionary())
 	{
-		std::cout << "Dictionary: " << node.AsString() << "\n";
+		std::cout << "Dictionary: " << "\n";
 		for (const auto& [key, node] : node.AsDictionary())
 		{
 			DebugNode(node, depth + 1, key + ": ");
@@ -103,15 +83,29 @@ namespace Nira
 							_heads.pop_back();
 						break;
 
-					case TokenType::Bullet:
-						_heads.back()->Add(Node());
-						_heads.push_back(&(*_heads.back())[_heads.back()->Size() - 1]);
+					case TokenType::String:
+						if (IsBound(1) && GetToken(1).type == TokenType::Colon)
+						{
+							Node& value = (*_heads.back())[GetToken(0).content] = Node();
+							_heads.push_back(&value);
 
+							Advance(2);
+
+							if (IsBound(0) && GetToken(0).type == TokenType::Newline)
+							{
+								Advance(1);
+							}
+
+							break;
+						}
+
+						*_heads.back() = GetToken(0).content;
 						Advance(1);
 						break;
 
-					case TokenType::String:
-						*_heads.back() = GetToken(0).content;
+					case TokenType::Bullet:
+						_heads.back()->Add(Node());
+						_heads.push_back(&(*_heads.back())[_heads.back()->Size() - 1]);
 
 						Advance(1);
 						break;
