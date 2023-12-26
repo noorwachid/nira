@@ -1,9 +1,10 @@
 #include "ToString.h"
 
-#include "Nira/Lexer.h"
 #include "Nira/Parse.h"
+#include "Nira/Compose.h"
 
 #include <fstream>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
@@ -37,7 +38,8 @@ int main(int argc, char** argv)
 		expectedOutput += line + "\n";
 	}
 
-	std::string output = ToString(Nira::Parse(input));
+	Nira::Node node = Nira::Parse(input);
+	std::string output = ToString(node);
 
 	if (output != expectedOutput)
 	{
@@ -51,6 +53,8 @@ int main(int argc, char** argv)
 	}
 
 	std::cout << "[PASS] " << argv[1] << "\n";
+
+	std::cout << Nira::Compose(node) << "\n";
 
 	return 0;
 }
