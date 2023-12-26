@@ -13,7 +13,7 @@ namespace Nira
 		Colon,
 		Bullet,
 		Newline,
-		IndentInc,
+		IndentIncr,
 		IndentDecr,
 	};
 

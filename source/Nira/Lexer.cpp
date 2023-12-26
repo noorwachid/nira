@@ -116,10 +116,10 @@ namespace Nira
 			for (size_t i = 0; i < (currentIndent - _previousIndent); ++i) 
 			{
 				Token token;
-				token.type = TokenType::IndentInc;
+				token.type = TokenType::IndentIncr;
 				_tokens.push_back(token);
-				_previousIndent = currentIndent;
 			}
+			_previousIndent = currentIndent;
 		}
 
 		if (_previousIndent > currentIndent)
@@ -129,8 +129,8 @@ namespace Nira
 				Token token;
 				token.type = TokenType::IndentDecr;
 				_tokens.push_back(token);
-				_previousIndent = currentIndent;
 			}
+			_previousIndent = currentIndent;
 		}
 
 		while (GetByte(0) == '-' && GetByte(1) == ' ') {
