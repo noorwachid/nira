@@ -63,17 +63,17 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 
 int main()
 {
-// 	std::string content = R"(
-// - - - A
-//     - B
-//   - - C
-//     - D
-// - E
-// )";
-
 	std::string content = R"(
-key: value
+- - - A
+    - B
+  - - C
+    - D
+- E
 )";
+
+// 	std::string content = R"(
+// key: value
+// )";
 
 	Nira::Lexer lexer;
 	lexer.Tokenize(content);

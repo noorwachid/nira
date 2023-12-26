@@ -71,69 +71,55 @@ namespace Nira
 
 			while (IsBound(0))
 			{
-				if (GetToken(0).type == TokenType::Newline)
+				switch (GetToken(0).type)
 				{
-					if (_heads.size() > 1)
-						_heads.pop_back();
+					case TokenType::Newline:
+						if (_heads.size() > 1)
+							_heads.pop_back();
 
-					Advance(1);
-					continue;
-				}
-
-				if (GetToken(0).type == TokenType::IndentIncr)
-				{
-					while (IsBound(0) && GetToken(0).type == TokenType::IndentIncr)
-					{
-						++_indent;
 						Advance(1);
-					}
+						break;
 
-					while (_indent + 1 < _heads.size() && _heads.size() > 1) 
-					{
-						_heads.pop_back();
-					}
+					case TokenType::IndentIncr:
+					case TokenType::IndentDecr:
+						if (GetToken(0).type == TokenType::IndentIncr)
+						{
+							while (IsBound(0) && GetToken(0).type == TokenType::IndentIncr)
+							{
+								++_indent;
+								Advance(1);
+							}
+						} 
+						else 
+						{
+							while (IsBound(0) && GetToken(0).type == TokenType::IndentDecr)
+							{
+								--_indent;
+								Advance(1);
+							}
+						}
 
-					continue;
-				}
+						while (_indent + 1 < _heads.size() && _heads.size() > 1) 
+							_heads.pop_back();
+						break;
 
-				if (GetToken(0).type == TokenType::IndentDecr)
-				{
-					while (IsBound(0) && GetToken(0).type == TokenType::IndentDecr)
-					{
-						--_indent;
+					case TokenType::Bullet:
+						_heads.back()->Add(Node());
+						_heads.push_back(&(*_heads.back())[_heads.back()->Size() - 1]);
+
 						Advance(1);
-					}
+						break;
 
-					while (_indent + 1 < _heads.size() && _heads.size() > 1) 
-					{
-						_heads.pop_back();
-					}
+					case TokenType::String:
+						*_heads.back() = GetToken(0).content;
 
-					continue;
+						Advance(1);
+						break;
+
+					default:
+						Advance(1);
+						break;
 				}
-
-				if (GetToken(0).type == TokenType::Bullet) 
-				{
-					_heads.back()->Add(Node());
-					_heads.push_back(&(*_heads.back())[_heads.back()->Size() - 1]);
-
-					// std::cout << "<head>\n";
-					// DebugNode(*_heads.back());
-					// std::cout << "</head>\n\n";
-
-					Advance(1);
-					continue;
-				}
-
-				if (GetToken(0).type == TokenType::String)
-				{
-					*_heads.back() = GetToken(0).content;
-
-					Advance(1);
-					continue;
-				}
-
-				Advance(1);
 			}
 		}
 
