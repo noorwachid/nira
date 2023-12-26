@@ -10,6 +10,7 @@ namespace Nira
 	enum class TokenType
 	{
 		String,
+		StringCon,
 		Colon,
 		Bullet,
 		Newline,

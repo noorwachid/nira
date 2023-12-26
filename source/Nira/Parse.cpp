@@ -100,8 +100,18 @@ namespace Nira
 						}
 
 						*_heads.back() = GetToken(0).content;
+
 						Advance(1);
 						break;
+
+					case TokenType::StringCon:
+					{
+						size_t indentPosition = (_heads.size() - 1) * 2;
+						*_heads.back() = _heads.back()->AsString() + GetToken(0).content.substr(indentPosition);
+						Advance(1);
+						break;
+					}
+						
 
 					case TokenType::Bullet:
 						_heads.back()->Add(Node());

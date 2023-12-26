@@ -1,5 +1,8 @@
-lyrics: hello darkness \
-  my old friend \
-  ive come to talk with you again
+tracks:
+  lyrics: hello darkness \
+    my old friend \
+    ive come to talk with you again
 ====
-
+Dictionary:
+  tracks: Dictionary:
+    lyrics: String(hello darkness my old friend ive come to talk with you again)

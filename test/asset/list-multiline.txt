@@ -1,4 +1,11 @@
-- - hello darkness \
-    my old friend
-  - ive come to talk with you again
+- hello darkness \
+  my old friend
+- - i've come to talk \
+    with you again
+  - because of vision softly creeping
 ====
+List:
+  0: String(hello darkness my old friend)
+  1: List:
+    0: String(i've come to talk with you again)
+    1: String(because of vision softly creeping)

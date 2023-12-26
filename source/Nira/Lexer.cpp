@@ -93,12 +93,9 @@ namespace Nira
 
 	void Lexer::ConsumeString()
 	{
-		if (_tokens.empty() || _tokens.back().type != TokenType::String)
-		{
-			Token token;
-			token.type = TokenType::String;
-			_tokens.push_back(token);
-		}
+		Token token;
+		token.type = TokenType::String;
+		_tokens.push_back(token);
 
 		while (IsBound())
 		{
@@ -119,6 +116,9 @@ namespace Nira
 						case '\n':
 						{
 							Advance(2);
+							Token token;
+							token.type = TokenType::StringCon;
+							_tokens.push_back(token);
 							break;
 						}
 
