@@ -6,18 +6,15 @@ namespace Nira
 	class Parser
 	{
 	public:
-		Node node;
-
-	public:
 		void Parse(const std::string& content)
 		{
 			_tokenIndex = 0;
 			_lexer.Tokenize(content);
-			_heads.push_back(&node);
+			_heads.push_back(&_root);
 
-			while (InBound(0))
+			while (IsBound(0))
 			{
-				if (InBound(1) && GetToken(0).type == TokenType::String && GetToken(1).type == TokenType::Colon)
+				if (IsBound(1) && GetToken(0).type == TokenType::String && GetToken(1).type == TokenType::Colon)
 				{
 					(*_heads.back()) [GetToken(0).content] = Node();
 
@@ -29,17 +26,18 @@ namespace Nira
 				if (GetToken(0).type == TokenType::Bullet)
 				{
 					(*_heads.back()).Add(Node());
+					Node& n = (*_heads.back());
 
-					_heads.push_back(&(*_heads.back()).At(-1));
+					_heads.push_back(&n[n.Size() - 1]);
 					Advance(1);
 					continue;
 				}
 
 				if (GetToken(0).type == TokenType::Newline)
 				{
-					if (InBound(1)) 
+					if (IsBound(1)) 
 					{
-						if (GetToken(1).type == TokenType::IndentInc)
+						if (GetToken(1).type == TokenType::IndentInc && _heads.back()->IsDictionary())
 						{
 							Advance(2);
 							continue;
@@ -72,8 +70,13 @@ namespace Nira
 			}
 		}
 
+		const Node& GetRoot()
+		{
+			return _root;
+		}
+
 	private:
-		bool InBound(size_t offset)
+		bool IsBound(size_t offset)
 		{
 			return (_tokenIndex + offset) < _lexer.GetTokenCount();
 		}
@@ -89,6 +92,7 @@ namespace Nira
 		}
 
 	private:
+		Node _root;
 		size_t _tokenIndex;
 		Lexer _lexer;
 		std::vector<Node*> _heads;
@@ -99,6 +103,6 @@ namespace Nira
 		Parser parser;
 		parser.Parse(content);
 
-		return parser.node;
+		return parser.GetRoot();
 	}
 }

@@ -15,16 +15,19 @@ namespace Nira
 		{
 			switch (GetByte(0))
 			{
-				case '\n': {
+				case '\n': 
+				{
+					while (IsBound() && GetByte(0) == '\n') Advance(1);
+
 					Token token;
 					token.type = TokenType::Newline;
 					_tokens.push_back(token);
-					Advance(1);
 					OnNewline();
 					break;
 				}
 
-				case ':': {
+				case ':': 
+				{
 					if (GetByte(1) == ' ')
 					{
 						Token token;
@@ -110,22 +113,27 @@ namespace Nira
 
 		if (_previousIndent < currentIndent)
 		{
-			Token token;
-			token.type = TokenType::IndentInc;
-			_tokens.push_back(token);
-			_previousIndent = currentIndent;
+			for (size_t i = 0; i < (currentIndent - _previousIndent); ++i) 
+			{
+				Token token;
+				token.type = TokenType::IndentInc;
+				_tokens.push_back(token);
+				_previousIndent = currentIndent;
+			}
 		}
 
 		if (_previousIndent > currentIndent)
 		{
-			Token token;
-			token.type = TokenType::IndentDecr;
-			_tokens.push_back(token);
-			_previousIndent = currentIndent;
+			for (size_t i = 0; i < (_previousIndent - currentIndent); ++i) 
+			{
+				Token token;
+				token.type = TokenType::IndentDecr;
+				_tokens.push_back(token);
+				_previousIndent = currentIndent;
+			}
 		}
 
-		if (GetByte(0) == '-' && GetByte(1) == ' ')
-		{
+		while (GetByte(0) == '-' && GetByte(1) == ' ') {
 			Token token;
 			token.type = TokenType::Bullet;
 			_tokens.push_back(token);
@@ -133,3 +141,4 @@ namespace Nira
 		}
 	}
 }
+

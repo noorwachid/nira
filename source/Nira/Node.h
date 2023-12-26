@@ -32,9 +32,11 @@ namespace Nira
 
 		void Add(const std::unordered_map<std::string, Node>& value);
 
+		size_t Size() const;
+
 		Node& operator[](size_t index);
 
-		Node& At(ssize_t index);
+		const Node& operator[](size_t index) const;
 
 		bool HasKey(const std::string& key) const;
 

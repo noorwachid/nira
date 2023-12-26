@@ -62,6 +62,14 @@ namespace Nira
 		Add(Node(value));
 	}
 
+	size_t Node::Size() const
+	{
+		if (!IsList())
+			return 0;
+
+		return std::get<std::vector<Node>>(_value).size();
+	}
+
 	Node& Node::operator[](size_t index)
 	{
 		if (!IsList())
@@ -70,13 +78,9 @@ namespace Nira
 		return std::get<std::vector<Node>>(_value)[index];
 	}
 
-	Node& Node::At(ssize_t index)
+	const Node& Node::operator[](size_t index) const
 	{
-		if (!IsList())
-			_value = std::vector<Node>();
-
-		return std::get<std::vector<Node>>(_value
-		)[index < 0 ? std::get<std::vector<Node>>(_value).size() + index : index];
+		return std::get<std::vector<Node>>(_value)[index];
 	}
 
 	bool Node::HasKey(const std::string& key) const
