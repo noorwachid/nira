@@ -1,13 +1,10 @@
 # Nira 
 YAML without unnecesary features
 
-No JSON syntax
-
-No multiple document in a single file
-
-No keyword
-
-Only 3 data type: string, list (vector of Node), and dictionary (unordered_map of string and Node)
+- No JSON subset
+- No keywords
+- Only 1 document in 1 file
+- Only 3 data types: string, list (vector of Node), and dictionary (unordered_map of string and Node)
 
 #### API
 ~~~ cpp
