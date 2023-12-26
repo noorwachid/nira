@@ -1,7 +1,7 @@
 #include "Nira/Lexer.h"
 #include "Nira/Parse.h"
 
-void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
+void ToString(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
 {
 	for (size_t i = 0; i < depth; ++i)
 	{
@@ -21,7 +21,7 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 		std::cout << "List:\n";
 		for (size_t i = 0; i < node.Size(); ++i)
 		{
-			DebugNode(node[i], depth + 1, std::to_string(i) + ": ");
+			ToString(node[i], depth + 1, std::to_string(i) + ": ");
 		}
 		return;
 	}
@@ -31,7 +31,7 @@ void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefi
 		std::cout << "Dictionary: " << "\n";
 		for (const auto& [key, node] : node.AsDictionary())
 		{
-			DebugNode(node, depth + 1, key + ": ");
+			ToString(node, depth + 1, key + ": ");
 		}
 		return;
 	}

@@ -19,9 +19,13 @@ namespace Nira
 				{
 					while (IsBound() && GetByte(0) == '\n') Advance(1);
 
-					Token token;
-					token.type = TokenType::Newline;
-					_tokens.push_back(token);
+					if (_tokens.empty() || _tokens.back().type != TokenType::Newline)
+					{
+						Token token;
+						token.type = TokenType::Newline;
+						_tokens.push_back(token);
+					}
+
 					OnNewline();
 					break;
 				}
@@ -50,6 +54,10 @@ namespace Nira
 					ConsumeString();
 					break;
 				}
+
+				case '#':
+					while (IsBound() && GetByte(0) != '\n') Advance(1);
+					break;
 
 				default:
 					ConsumeString();
@@ -92,11 +100,47 @@ namespace Nira
 			_tokens.push_back(token);
 		}
 
-		do
+		while (IsBound())
 		{
-			_tokens.back().content += GetByte(0);
-			Advance(1);
-		} while (IsBound() && GetByte(0) != '\n' && GetByte(0) != ':');
+			switch (GetByte(0))
+			{
+				// escaping characters
+				case '\\':
+					switch (GetByte(1)) 
+					{
+						case ':':
+						case '-':
+						case '#':
+						case '\\':
+							_tokens.back().content += GetByte(1);
+							Advance(2);
+							break;
+						
+						case '\n':
+						{
+							Advance(2);
+							break;
+						}
+
+						default:
+							_tokens.back().content += GetByte(0);
+							_tokens.back().content += GetByte(1);
+							Advance(2);
+							break;
+					}
+					break;
+				
+				case '\n':
+				case '#':
+				case ':':
+					return;
+
+				default:
+					_tokens.back().content += GetByte(0);
+					Advance(1);
+					break;
+			}
+		}
 	}
 
 	void Lexer::OnNewline()
