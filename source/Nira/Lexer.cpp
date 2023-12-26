@@ -177,7 +177,8 @@ namespace Nira
 			_previousIndent = currentIndent;
 		}
 
-		while (GetByte(0) == '-' && GetByte(1) == ' ') {
+		while (GetByte(0) == '-' && GetByte(1) == ' ') 
+		{
 			Token token;
 			token.type = TokenType::Bullet;
 			_tokens.push_back(token);

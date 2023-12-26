@@ -42,6 +42,8 @@ namespace Nira
 
 		Node& operator[](const std::string& key);
 
+		const Node& operator[](const std::string& key) const;
+
 		bool IsString() const;
 
 		bool IsList() const;

@@ -99,6 +99,11 @@ namespace Nira
 		return std::get<std::unordered_map<std::string, Node>>(_value)[key];
 	}
 
+	const Node& Node::operator[](const std::string& key) const
+	{
+		return std::get<std::unordered_map<std::string, Node>>(_value).at(key);
+	}
+
 	bool Node::IsString() const
 	{
 		return std::holds_alternative<std::string>(_value);
