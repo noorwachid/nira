@@ -73,14 +73,26 @@ int main()
 // - E
 // )";
 
+// 	content = R"(
+// jaime:
+//   hobby: Reading
+//   age: 34
+//   pets:
+//     muray:
+//       age: 3
+//   current-address: ID 781
+// )";
+	
 	content = R"(
-jaime:
-  hobby: Reading
-  age: 34
-  pets:
-    muray:
-      age: 3
-  current-address: ID 781
+status: success
+result:
+  name: Nora
+  age: 27
+  skills:
+    - C++
+    - Python
+    - - MySQL
+      - Sqlite
 )";
 
 	Nira::Lexer lexer;
