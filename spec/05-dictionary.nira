@@ -1,3 +1,5 @@
+# dictionary key-value has to be separated by ": " colon followed by single space
+
 # self explanatory  
 key: value
 
