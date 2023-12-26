@@ -1,0 +1,8 @@
+- A
+- B
+- C
+====
+List:
+  0: String(A)
+  1: String(B)
+  2: String(C)

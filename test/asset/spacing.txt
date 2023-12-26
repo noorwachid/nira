@@ -1,0 +1,16 @@
+- A
+- B
+- - C
+# dot
+# cross
+# hadamard
+  - D
+  - E
+====
+List:
+  0: String(A)
+  1: String(B)
+  2: List:
+    0: String(C)
+    1: String(D)
+    2: String(E)

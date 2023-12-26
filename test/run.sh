@@ -1,1 +1,1 @@
-ninja -C build && ./build/nira-test
+ninja -C build && ./build/nira-test $1

@@ -1,0 +1,21 @@
+status: success
+result:
+  name: Nora
+  age: 27
+  skills:
+    - C++
+    - Python
+    - - MySQL
+      - Sqlite
+====
+Dictionary:
+  status: String(success)
+  result: Dictionary:
+    name: String(Nora)
+    age: String(27)
+    skills: List:
+      0: String(C++)
+      1: String(Python)
+      2: List:
+        0: String(MySQL)
+        1: String(Sqlite)

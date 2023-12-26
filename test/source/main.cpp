@@ -1,113 +1,56 @@
-#include "Nira/Compose.h"
+#include "ToString.h"
+
 #include "Nira/Lexer.h"
 #include "Nira/Parse.h"
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
-const char* ToNullString(Nira::TokenType type)
+#include <fstream>
+
+int main(int argc, char** argv)
 {
-	switch (type)
+	if (argc < 2)
 	{
-		case Nira::TokenType::String:
-			return "String";
-		case Nira::TokenType::Colon:
-			return "Colon";
-		case Nira::TokenType::Bullet:
-			return "Bullet";
-		case Nira::TokenType::Newline:
-			return "Newline";
-		case Nira::TokenType::IndentIncr:
-			return "IndentIncr";
-		case Nira::TokenType::IndentDecr:
-			return "IndentDecr";
-	}
-}
-
-void DebugNode(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
-{
-	for (size_t i = 0; i < depth; ++i)
-	{
-		std::cout << "  ";
+		std::cout << "please specify the input file\n";
+		return 0;
 	}
 
-	std::cout << prefix;
-
-	if (node.IsString())
+	if (!std::filesystem::exists(argv[1]))
 	{
-		std::cout << "String(" << node.AsString() << ")\n";
-		return;
+		std::cout << "file does not exist\n";
+		return 0;
 	}
 
-	if (node.IsList())
+	std::string input;
+	std::string expectedOutput;
+	std::string line;
+	std::ifstream file(argv[1]);
+
+	while (std::getline(file, line))
 	{
-		std::cout << "List:\n";
-		for (size_t i = 0; i < node.Size(); ++i)
-		{
-			DebugNode(node[i], depth + 1, std::to_string(i) + ": ");
-		}
-		return;
+		if (line == "====") 
+			break;
+
+		input += line + "\n";
 	}
 
-	if (node.IsDictionary())
+	while (std::getline(file, line))
 	{
-		std::cout << "Dictionary: " << "\n";
-		for (const auto& [key, node] : node.AsDictionary())
-		{
-			DebugNode(node, depth + 1, key + ": ");
-		}
-		return;
-	}
-}
-
-int main()
-{
-	std::string content;
-
-// 	content = R"(
-// - - - A
-//     - B
-//   - - C
-//     - D
-// - E
-// )";
-
-// 	content = R"(
-// jaime:
-//   hobby: Reading
-//   age: 34
-//   pets:
-//     muray:
-//       age: 3
-//   current-address: ID 781
-// )";
-	
-	content = R"(
-status: success
-result:
-  name: Nora
-  age: 27
-  skills:
-    - C++
-    - Python
-    - - MySQL
-      - Sqlite
-)";
-
-	Nira::Lexer lexer;
-	lexer.Tokenize(content);
-
-	std::cout << "\n[LEXER]\n";
-
-	for (size_t i = 0; i < lexer.GetTokenCount(); ++i)
-	{
-		std::cout << ToNullString(lexer.GetToken(i).type) << ": " << lexer.GetToken(i).content << "\n";
+		expectedOutput += line + "\n";
 	}
 
-	std::cout << "\n[TREE]\n";
+	std::string output = ToString(Nira::Parse(input));
 
-	DebugNode(Nira::Parse(content));
+	if (output != expectedOutput)
+	{
+		std::cout << "[FAIL] " << argv[1] << "\n";
+		std::cout << "expected-output does not match\n";
+		std::cout << "expected-output:\n";
+		std::cout << expectedOutput;
+		std::cout << "output:\n";
+		std::cout << output;
+		return 0;
+	}
+
+	std::cout << "[PASS] " << argv[1] << "\n";
 
 	return 0;
 }
