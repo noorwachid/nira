@@ -54,7 +54,5 @@ int main(int argc, char** argv)
 
 	std::cout << "[PASS] " << argv[1] << "\n";
 
-	std::cout << Nira::Compose(node) << "\n";
-
 	return 0;
 }
