@@ -1,6 +1,6 @@
-#include "Nira/Lexer.h"
+#include "Nira/Internal/Lexer.h"
 
-namespace Nira
+namespace Nira::Internal
 {
 	void Lexer::Tokenize(const std::string& input)
 	{

@@ -46,15 +46,15 @@ namespace Nira
 
 		bool IsString() const;
 
-		bool IsList() const;
+		bool IsArray() const;
 
-		bool IsDictionary() const;
+		bool IsMap() const;
 
 		const std::string& AsString() const;
 
-		const std::vector<Node>& AsList() const;
+		const std::vector<Node>& AsArray() const;
 
-		const std::unordered_map<std::string, Node>& AsDictionary() const;
+		const std::unordered_map<std::string, Node>& AsMap() const;
 
 	private:
 		std::variant<std::string, std::vector<Node>, std::unordered_map<std::string, Node>> _value;

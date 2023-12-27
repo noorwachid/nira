@@ -1,11 +1,76 @@
-#include "ToString.h"
-
-#include "Nira/Lexer.h"
 #include "Nira/Parse.h"
 #include "Nira/Compose.h"
+#include "Nira/Internal/Lexer.h"
 
 #include <fstream>
 #include <iostream>
+
+std::string Quote(const std::string& content)
+{
+	std::string quoted = "\"";
+
+	for (char letter: content)
+	{
+		switch (letter) 
+		{
+			case '\t':
+				quoted += "\\t";
+				break;
+
+			case '\n':
+				quoted += "\\n";
+				break;
+
+			case '"':
+				quoted += "\\\"";
+				break;
+
+			default:
+				quoted += letter;
+				break;
+		}
+	}
+
+	quoted += "\"";
+
+	return quoted;
+}
+
+std::string ToString(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
+{
+	std::string content;
+
+	for (size_t i = 0; i < depth; ++i)
+		content += "  ";
+
+	content += prefix;
+
+	if (node.IsString())
+		return content + "String(" + Quote(node.AsString()) + ")\n";
+
+	if (node.IsArray())
+	{
+		content += "Array:\n";
+
+		for (size_t i = 0; i < node.Size(); ++i)
+			content += ToString(node[i], depth + 1, std::to_string(i) + ": ");
+
+		return content;
+	}
+
+	if (node.IsMap())
+	{
+		content += "Map:\n";
+
+		for (const auto& [key, node] : node.AsMap())
+			content += ToString(node, depth + 1, Quote(key) + ": ");
+
+		return content;
+	}
+
+	return content;
+}
+
 
 int main(int argc, char** argv)
 {
@@ -47,38 +112,39 @@ int main(int argc, char** argv)
 		std::cout << "[FAIL] " << argv[1] << "\n";
 		std::cout << "expected-output:\n";
 		std::cout << expectedOutput;
-		std::cout << "\noutput-tokens:\n";
 
-		Nira::Lexer lexer;
-		lexer.Tokenize(input);
-		for (size_t i = 0; i < lexer.GetTokenCount(); ++i)
-		{
-			const Nira::Token& token = lexer.GetToken(i);
-			switch (token.type)
-			{
-				case Nira::TokenType::Newline:
-					std::cout << "Newline\n";
-					break;
-				case Nira::TokenType::Bullet:
-					std::cout << "Bullet\n";
-					break;
-				case Nira::TokenType::Colon:
-					std::cout << "Colon\n";
-					break;
-				case Nira::TokenType::IndentIncr:
-					std::cout << "IndentIncr\n";
-					break;
-				case Nira::TokenType::IndentDecr:
-					std::cout << "IndentDecr\n";
-					break;
-				case Nira::TokenType::String:
-					std::cout << "String(" << token.content << ")\n";
-					break;
-				case Nira::TokenType::StringCon:
-					std::cout << "StringCon(" << token.content << ")\n";
-					break;
-			}
-		}
+		// std::cout << "\noutput-tokens:\n";
+		//
+		// Nira::Internal::Lexer lexer;
+		// lexer.Tokenize(input);
+		// for (size_t i = 0; i < lexer.GetTokenCount(); ++i)
+		// {
+		// 	const Nira::Internal::Token& token = lexer.GetToken(i);
+		// 	switch (token.type)
+		// 	{
+		// 		case Nira::Internal::TokenType::Newline:
+		// 			std::cout << "Newline\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::Bullet:
+		// 			std::cout << "Bullet\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::Colon:
+		// 			std::cout << "Colon\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::IndentIncr:
+		// 			std::cout << "IndentIncr\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::IndentDecr:
+		// 			std::cout << "IndentDecr\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::String:
+		// 			std::cout << "String(" << std::quoted(token.content) << ")\n";
+		// 			break;
+		// 		case Nira::Internal::TokenType::StringCon:
+		// 			std::cout << "StringCon(" << std::quoted(token.content) << ")\n";
+		// 			break;
+		// 	}
+		// }
 
 		std::cout << "\noutput-tree:\n";
 		std::cout << output;

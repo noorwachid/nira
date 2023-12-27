@@ -6,11 +6,11 @@ jaime:
       age: 3
   current-address: ID 781
 ====
-Dictionary:
-  jaime: Dictionary:
-    hobby: String(Reading)
-    age: String(34)
-    pets: Dictionary:
-      muray: Dictionary:
-        age: String(3)
-    current-address: String(ID 781)
+Map:
+  "jaime": Map:
+    "hobby": String("Reading")
+    "age": String("34")
+    "pets": Map:
+      "muray": Map:
+        "age": String("3")
+    "current-address": String("ID 781")

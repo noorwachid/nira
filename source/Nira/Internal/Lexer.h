@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace Nira
+namespace Nira::Internal
 {
 	enum class TokenType
 	{

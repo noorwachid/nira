@@ -8,14 +8,14 @@ result:
     - - MySQL
       - Sqlite
 ====
-Dictionary:
-  status: String(success)
-  result: Dictionary:
-    name: String(Nora)
-    age: String(27)
-    skills: List:
-      0: String(C++)
-      1: String(Python)
-      2: List:
-        0: String(MySQL)
-        1: String(Sqlite)
+Map:
+  "status": String("success")
+  "result": Map:
+    "name": String("Nora")
+    "age": String("27")
+    "skills": Array:
+      0: String("C++")
+      1: String("Python")
+      2: Array:
+        0: String("MySQL")
+        1: String("Sqlite")

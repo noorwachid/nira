@@ -1,4 +1,4 @@
 key: value
 ====
-Dictionary:
-  key: String(value)
+Map:
+  "key": String("value")

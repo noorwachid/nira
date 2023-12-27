@@ -3,6 +3,6 @@ tracks:
     my old friend \
     ive come to talk with you again
 ====
-Dictionary:
-  tracks: Dictionary:
-    lyrics: String(hello darkness my old friend ive come to talk with you again)
+Map:
+  "tracks": Map:
+    "lyrics": String("hello darkness my old friend ive come to talk with you again")

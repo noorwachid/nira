@@ -1,4 +1,4 @@
 hello darkness \
 my old friend
 ====
-String(hello darkness my old friend)
+String("hello darkness my old friend")

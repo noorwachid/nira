@@ -1,41 +1,5 @@
-#include "Nira/Lexer.h"
 #include "Nira/Parse.h"
-
-void ToString(const Nira::Node& node, size_t depth = 0, const std::string prefix = "")
-{
-	for (size_t i = 0; i < depth; ++i)
-	{
-		std::cout << "  ";
-	}
-
-	std::cout << prefix;
-
-	if (node.IsString())
-	{
-		std::cout << "String(" << node.AsString() << ")\n";
-		return;
-	}
-
-	if (node.IsList())
-	{
-		std::cout << "List:\n";
-		for (size_t i = 0; i < node.Size(); ++i)
-		{
-			ToString(node[i], depth + 1, std::to_string(i) + ": ");
-		}
-		return;
-	}
-
-	if (node.IsDictionary())
-	{
-		std::cout << "Dictionary: " << "\n";
-		for (const auto& [key, node] : node.AsDictionary())
-		{
-			ToString(node, depth + 1, key + ": ");
-		}
-		return;
-	}
-}
+#include "Nira/Internal/Lexer.h"
 
 namespace Nira
 {
@@ -53,18 +17,18 @@ namespace Nira
 			{
 				switch (GetToken(0).type)
 				{
-					case TokenType::Newline:
+					case Internal::TokenType::Newline:
 						if (_heads.size() > 1)
 							_heads.pop_back();
 
 						Advance(1);
 						break;
 
-					case TokenType::IndentIncr:
-					case TokenType::IndentDecr:
-						if (GetToken(0).type == TokenType::IndentIncr)
+					case Internal::TokenType::IndentIncr:
+					case Internal::TokenType::IndentDecr:
+						if (GetToken(0).type == Internal::TokenType::IndentIncr)
 						{
-							while (IsBound(0) && GetToken(0).type == TokenType::IndentIncr)
+							while (IsBound(0) && GetToken(0).type == Internal::TokenType::IndentIncr)
 							{
 								++_indent;
 								Advance(1);
@@ -72,7 +36,7 @@ namespace Nira
 						} 
 						else 
 						{
-							while (IsBound(0) && GetToken(0).type == TokenType::IndentDecr)
+							while (IsBound(0) && GetToken(0).type == Internal::TokenType::IndentDecr)
 							{
 								--_indent;
 								Advance(1);
@@ -83,15 +47,15 @@ namespace Nira
 							_heads.pop_back();
 						break;
 
-					case TokenType::String:
-						if (IsBound(1) && GetToken(1).type == TokenType::Colon)
+					case Internal::TokenType::String:
+						if (IsBound(1) && GetToken(1).type == Internal::TokenType::Colon)
 						{
 							Node& value = (*_heads.back())[GetToken(0).content] = Node();
 							_heads.push_back(&value);
 
 							Advance(2);
 
-							if (IsBound(0) && GetToken(0).type == TokenType::Newline)
+							if (IsBound(0) && GetToken(0).type == Internal::TokenType::Newline)
 							{
 								Advance(1);
 							}
@@ -104,7 +68,7 @@ namespace Nira
 						Advance(1);
 						break;
 
-					case TokenType::StringCon:
+					case Internal::TokenType::StringCon:
 					{
 						size_t indentPosition = (_heads.size() - 1) * 2;
 						*_heads.back() = _heads.back()->AsString() + GetToken(0).content.substr(indentPosition);
@@ -113,7 +77,7 @@ namespace Nira
 					}
 						
 
-					case TokenType::Bullet:
+					case Internal::TokenType::Bullet:
 						_heads.back()->Add(Node());
 						_heads.push_back(&(*_heads.back())[_heads.back()->Size() - 1]);
 
@@ -143,7 +107,7 @@ namespace Nira
 			_tokenIndex += offset;
 		}
 
-		const Token& GetToken(size_t offset)
+		const Internal::Token& GetToken(size_t offset)
 		{
 			return _lexer.GetToken(_tokenIndex + offset);
 		}
@@ -152,7 +116,7 @@ namespace Nira
 		Node _root;
 		size_t _tokenIndex;
 		size_t _indent;
-		Lexer _lexer;
+		Internal::Lexer _lexer;
 		std::vector<Node*> _heads;
 	};
 

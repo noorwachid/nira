@@ -1,6 +1,6 @@
 A: B: C
 D\: E: F
 ====
-Dictionary:
-  A: String(B: C)
-  D: E: String(F)
+Map:
+  "A": String("B: C")
+  "D: E": String("F")

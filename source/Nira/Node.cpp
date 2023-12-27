@@ -41,7 +41,7 @@ namespace Nira
 
 	void Node::Add(const Node& node)
 	{
-		if (!IsList())
+		if (!IsArray())
 			_value = std::vector<Node>();
 
 		std::get<std::vector<Node>>(_value).push_back(node);
@@ -64,7 +64,7 @@ namespace Nira
 
 	size_t Node::Size() const
 	{
-		if (!IsList())
+		if (!IsArray())
 			return 0;
 
 		return std::get<std::vector<Node>>(_value).size();
@@ -72,7 +72,7 @@ namespace Nira
 
 	Node& Node::operator[](size_t index)
 	{
-		if (!IsList())
+		if (!IsArray())
 			_value = std::vector<Node>();
 
 		return std::get<std::vector<Node>>(_value)[index];
@@ -85,7 +85,7 @@ namespace Nira
 
 	bool Node::HasKey(const std::string& key) const
 	{
-		if (!IsDictionary())
+		if (!IsMap())
 			return false;
 
 		return std::get<std::unordered_map<std::string, Node>>(_value).count(key);
@@ -93,7 +93,7 @@ namespace Nira
 
 	Node& Node::operator[](const std::string& key)
 	{
-		if (!IsDictionary())
+		if (!IsMap())
 			_value = std::unordered_map<std::string, Node>();
 
 		return std::get<std::unordered_map<std::string, Node>>(_value)[key];
@@ -109,12 +109,12 @@ namespace Nira
 		return std::holds_alternative<std::string>(_value);
 	}
 
-	bool Node::IsList() const
+	bool Node::IsArray() const
 	{
 		return std::holds_alternative<std::vector<Node>>(_value);
 	}
 
-	bool Node::IsDictionary() const
+	bool Node::IsMap() const
 	{
 		return std::holds_alternative<std::unordered_map<std::string, Node>>(_value);
 	}
@@ -124,12 +124,12 @@ namespace Nira
 		return std::get<std::string>(_value);
 	}
 
-	const std::vector<Node>& Node::AsList() const
+	const std::vector<Node>& Node::AsArray() const
 	{
 		return std::get<std::vector<Node>>(_value);
 	}
 
-	const std::unordered_map<std::string, Node>& Node::AsDictionary() const
+	const std::unordered_map<std::string, Node>& Node::AsMap() const
 	{
 		return std::get<std::unordered_map<std::string, Node>>(_value);
 	}

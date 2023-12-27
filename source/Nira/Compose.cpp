@@ -24,10 +24,10 @@ namespace Nira
 			return;
 		}
 
-		if (node.IsList())
+		if (node.IsArray())
 		{
 			size_t index = 0;
-			for (const Nira::Node& child : node.AsList())
+			for (const Nira::Node& child : node.AsArray())
 			{
 				RecursiveCompose(child, depth + 1, "- ", content, previousType == NodeType::List && index == 0, NodeType::List);
 				++index;
@@ -35,9 +35,9 @@ namespace Nira
 			return;
 		}
 
-		if (node.IsDictionary())
+		if (node.IsMap())
 		{
-			for (const auto& [key, child] : node.AsDictionary())
+			for (const auto& [key, child] : node.AsMap())
 				RecursiveCompose(child, depth + 1, key + ": " + (!child.IsString() ? "\n" : ""), content, false, NodeType::Dictionary);
 			return;
 		}

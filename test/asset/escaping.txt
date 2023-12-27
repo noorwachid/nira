@@ -2,7 +2,7 @@
 - \- not a bullet
 - not a \: colon
 ====
-List:
-  0: String(# not a comment \ backslash)
-  1: String(- not a bullet)
-  2: String(not a : colon)
+Array:
+  0: String("# not a comment \ backslash")
+  1: String("- not a bullet")
+  2: String("not a : colon")
