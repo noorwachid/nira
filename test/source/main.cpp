@@ -45,24 +45,24 @@ std::string ToString(const Nira::Node& node, size_t depth = 0, const std::string
 
 	content += prefix;
 
-	if (node.IsString())
-		return content + "String(" + Quote(node.AsString()) + ")\n";
+	if (node.isString())
+		return content + "String(" + Quote(node.asString()) + ")\n";
 
-	if (node.IsArray())
+	if (node.isArray())
 	{
 		content += "Array:\n";
 
-		for (size_t i = 0; i < node.Size(); ++i)
+		for (size_t i = 0; i < node.size(); ++i)
 			content += ToString(node[i], depth + 1, std::to_string(i) + ": ");
 
 		return content;
 	}
 
-	if (node.IsMap())
+	if (node.isMap())
 	{
 		content += "Map:\n";
 
-		for (const auto& [key, node] : node.AsMap())
+		for (const auto& [key, node] : node.asMap())
 			content += ToString(node, depth + 1, Quote(key) + ": ");
 
 		return content;
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 		expectedOutput += line + "\n";
 	}
 
-	Nira::Node node = Nira::Parse(input);
+	Nira::Node node = Nira::parse(input);
 	std::string output = ToString(node);
 
 	if (output != expectedOutput)

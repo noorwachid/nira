@@ -5,44 +5,40 @@
 #include <unordered_map>
 #include <vector>
 
-namespace Nira::Internal
-{
-	enum class TokenType
-	{
-		String,
-		StringCon,
-		Colon,
-		Bullet,
-		Newline,
-		IndentIncr,
-		IndentDecr,
+namespace Nira::Internal {
+	enum class TokenType {
+		string,
+		stringCon,
+		colon,
+		bullet,
+		newline,
+		indentIncr,
+		indentDecr,
 	};
 
-	struct Token
-	{
+	struct Token {
 		TokenType type;
 		std::string content;
 	};
 
-	class Lexer
-	{
+	class Lexer {
 	public:
-		void Tokenize(const std::string& input);
+		void parse(const std::string& input);
 
-		const Token& GetToken(size_t index) const;
+		const Token& getToken(size_t index) const;
 
-		size_t GetTokenCount();
+		size_t getTokenSize();
 
 	private:
-		bool IsBound();
+		bool isBound();
 
-		void Advance(size_t offset);
+		void advance(size_t offset);
 
-		char GetByte(size_t offset);
+		char getByte(size_t offset);
 
-		void ConsumeString();
+		void consumeString();
 
-		void OnNewline();
+		void onNewline();
 
 	private:
 		bool _keyPart;
@@ -53,4 +49,3 @@ namespace Nira::Internal
 		size_t _previousIndent;
 	};
 }
-
