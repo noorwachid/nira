@@ -30,6 +30,10 @@ namespace Nira {
 
 		void add(const std::unordered_map<std::string, Node>& value);
 
+		void remove(size_t index);
+
+		void remove(const std::string& key);
+
 		size_t size() const;
 
 		Node& operator[](size_t index);

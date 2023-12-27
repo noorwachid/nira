@@ -1,5 +1,4 @@
-#include "Nira/Parse.h"
-
+#include "Nira/parse.h"
 #include "Nira/Internal/Lexer.h"
 
 namespace Nira {

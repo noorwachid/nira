@@ -1,4 +1,4 @@
-#include "Nira/Compose.h"
+#include "Nira/compose.h"
 
 namespace Nira {
 	enum class NodeType {

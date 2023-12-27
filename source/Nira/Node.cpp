@@ -18,22 +18,26 @@ namespace Nira {
 
 	Node& Node::operator=(const std::string& value) {
 		_value = value;
+
 		return *this;
 	}
 
 	Node& Node::operator=(const std::vector<Node>& value) {
 		_value = value;
+
 		return *this;
 	}
 
 	Node& Node::operator=(const std::unordered_map<std::string, Node>& value) {
 		_value = value;
+
 		return *this;
 	}
 
 	void Node::add(const Node& node) {
-		if (!isArray())
+		if (!isArray()) {
 			_value = std::vector<Node>();
+		}
 
 		std::get<std::vector<Node>>(_value).push_back(node);
 	}
@@ -50,16 +54,38 @@ namespace Nira {
 		add(Node(value));
 	}
 
-	size_t Node::size() const {
-		if (!isArray())
-			return 0;
+	void Node::remove(size_t index) {
+		if (!isArray()) {
+			return;
+		}
 
-		return std::get<std::vector<Node>>(_value).size();
+		std::get<std::vector<Node>>(_value).erase(std::get<std::vector<Node>>(_value).begin() + index);
+	}
+
+	void Node::remove(const std::string& key) {
+		if (!isMap()) {
+			return;
+		}
+
+		std::get<std::unordered_map<std::string, Node>>(_value).erase(key);
+	}
+
+	size_t Node::size() const {
+		if (isArray()) {
+			return std::get<std::vector<Node>>(_value).size();
+		}
+
+		if (isMap()) {
+			return std::get<std::unordered_map<std::string, Node>>(_value).size();
+		}
+
+		return std::get<std::string>(_value).size();
 	}
 
 	Node& Node::operator[](size_t index) {
-		if (!isArray())
+		if (!isArray()) {
 			_value = std::vector<Node>();
+		}
 
 		return std::get<std::vector<Node>>(_value)[index];
 	}
@@ -69,15 +95,17 @@ namespace Nira {
 	}
 
 	bool Node::hasKey(const std::string& key) const {
-		if (!isMap())
+		if (!isMap()) {
 			return false;
+		}
 
 		return std::get<std::unordered_map<std::string, Node>>(_value).count(key);
 	}
 
 	Node& Node::operator[](const std::string& key) {
-		if (!isMap())
+		if (!isMap()) {
 			_value = std::unordered_map<std::string, Node>();
+		}
 
 		return std::get<std::unordered_map<std::string, Node>>(_value)[key];
 	}
